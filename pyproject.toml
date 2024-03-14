@@ -1,0 +1,32 @@
+[tool.poetry]
+name = "readwise-apple-notes"
+version = "0.1.0"
+description = "Export Readwise highlights into Apple Notes."
+authors = ["Scott Carvalho <scottcarvalho71@gmail.com>"]
+license = "Apache-2.0"
+readme = "README.md"
+classifiers = [
+    "License :: OSI Approved :: Apache Software License"
+]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+click = "^8.1.7"
+readwise = "^1.1.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.1.1"
+ruff = "^0.3.2"
+
+[tool.poetry.urls]
+Homepage = "https://github.com/Scarvy/readwise-apple-notes"
+Changelog = "https://github.com/Scarvy/readwise-apple-notes/releases"
+Issues = "https://github.com/Scarvy/readwise-apple-notes/issues"
+CI = "https://github.com/Scarvy/readwise-apple-notes/actions"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+readwise-apple-notes = 'readwise_apple_notes.cli:cli'
