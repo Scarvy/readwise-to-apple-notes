@@ -112,7 +112,7 @@ def export_book_highlights(book_id: str, title: str, num: int | None = None):
                         "<br>" & "<b>Last Updated</b>: {highlight.updated.strftime("%d/%m/%Y")}" & ¬
                         "<br>"
                     else
-                        make new note at theFolder with properties {{name:"{title}", body:"{highlight.text}"}}
+                        make new note at theFolder with properties {{name:"{title}", body:"<br>{highlight.text}"}}
                     end if
                 end tell
                 """
