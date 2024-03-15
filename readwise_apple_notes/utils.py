@@ -26,6 +26,12 @@ def get_highlight_count(book_id: str):
     ]
 
 
+def get_highlights(updated_after: str = None, book_ids: list[str] = None):
+    return client.get_pagination_limit_20(
+        "/export/", params={"updatedAfter": updated_after, "ids": ",".join(book_ids)}
+    ).json()["results"]
+
+
 def get_book_details(book_id: str) -> dict:
     return client.get(f"/books/{book_id}").json()
 
