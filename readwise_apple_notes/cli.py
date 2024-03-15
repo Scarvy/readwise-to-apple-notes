@@ -37,3 +37,24 @@ def export(stop_after, num_books, book_id, dump):
 def book(book_id):
     book = utils.get_book_details(book_id)
     click.echo(json.dumps(book, indent=2))
+
+
+@cli.command()
+def books():
+    for book in utils.get_books():
+        click.echo(
+            json.dumps(
+                {
+                    "id": book.id,
+                    "title": book.title,
+                    "author": book.author,
+                    "category": book.category,
+                    "num_highlights": book.num_highlights,
+                    "source": book.source,
+                    "source_url": book.source_url,
+                    "document_note": book.document_note,
+                    "document_tag": ", ".join(tag.name for tag in book.tags),
+                },
+                indent=2,
+            )
+        )
