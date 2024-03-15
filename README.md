@@ -5,7 +5,7 @@
 [![Tests](https://github.com/Scarvy/readwise-apple-notes/actions/workflows/test.yml/badge.svg)](https://github.com/Scarvy/readwise-apple-notes/actions/workflows/test.yml)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/Scarvy/readwise-apple-notes/blob/master/LICENSE)
 
-Export Readwise highlights data into Apple Notes.
+Export Readwise highlights to Apple Notes.
 
 ## Installation
 
@@ -21,7 +21,7 @@ For help, run:
 
 You can also use:
 
-    python -m ticktick_to_sqlite --help
+    python -m readwise-apple-notes --help
 
 ## Development
 

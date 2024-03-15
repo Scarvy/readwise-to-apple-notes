@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "readwise-apple-notes"
 version = "0.1.0"
-description = "Export Readwise highlights into Apple Notes."
+description = "Export Readwise highlights to Apple Notes."
 authors = ["Scott Carvalho <scottcarvalho71@gmail.com>"]
 license = "Apache-2.0"
 readme = "README.md"
@@ -13,6 +13,7 @@ classifiers = [
 python = "^3.12"
 click = "^8.1.7"
 readwise = "^1.1.0"
+python-dotenv = "^1.0.1"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.1.1"
