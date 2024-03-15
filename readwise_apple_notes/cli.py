@@ -16,24 +16,24 @@ def cli():
 @click.option("--stop-after", type=int, help="Stop after this many highlights")
 @click.option("--num-books", type=int, help="Number of books to process")
 @click.option("--dump", is_flag=True, help="Output highlights to standard output")
-def export(stop_after, num_books, dump):
-    for book in itertools.islice(utils.get_books(), num_books):
-        i = 0
+@click.option("--book-id", type=str, help="Export highlights for a specific book")
+def export(stop_after, num_books, book_id, dump):
+    if book_id:  # Single book
+        book = utils.get_book_details(book_id)
         if dump:
-            for highlight in utils.get_book_highlights(book.id):
-                click.echo(
-                    json.dumps(
-                        {
-                            "title": book.title,
-                            "highlight": highlight.text,
-                            "note": highlight.note,
-                            "tags": ", ".join(tag.name for tag in highlight.tags),
-                        },
-                        indent=2,
-                    )
-                )
-                i += 1
-                if stop_after and i >= stop_after:
-                    break
+            utils.dump_highlights(book["id"], book["title"])
         else:
-            utils.export_book_highlights(book.id, book.title, stop_after)
+            utils.export_book_highlights(book["id"], book["title"], stop_after)
+    else:  # All book highlights
+        for book in itertools.islice(utils.get_books(), num_books):
+            if dump:
+                utils.dump_highlights(book.id, book.title)
+            else:
+                utils.export_book_highlights(book.id, book.title, stop_after)
+
+
+@cli.command()
+@click.argument("book_id")
+def book(book_id):
+    book = utils.get_book_details(book_id)
+    click.echo(json.dumps(book, indent=2))

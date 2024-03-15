@@ -1,4 +1,5 @@
 import itertools
+import json
 import os
 import subprocess
 
@@ -25,6 +26,10 @@ def get_highlight_count(book_id: str):
     ]
 
 
+def get_book_details(book_id: str) -> dict:
+    return client.get(f"/books/{book_id}").json()
+
+
 def export_book_highlights(book_id: str, title: str, num: int | None = None):
     highlights = get_book_highlights(book_id)
 
@@ -38,49 +43,99 @@ def export_book_highlights(book_id: str, title: str, num: int | None = None):
         show_pos=True,
     ) as bar:
         for highlight in itertools.islice(highlights, num):
-            tags = ", ".join(tag.name for tag in highlight.tags)
+            if highlight.note.startswith(".h"):
+                apple_script = f"""
+                    tell application "Notes"
+                    -- Ensure the "Readwise" folder exists
+                    set folderName to "Readwise"
+                    set theFolder to missing value
+                    repeat with eachFolder in folders
+                        if name of eachFolder is folderName then
+                            set theFolder to eachFolder
+                        end if
+                    end repeat
+                    if theFolder is missing value then
+                        set theFolder to (make new folder with properties {{name:folderName}})
+                    end if
+                    
+                    -- Attempt to find the note by title in the "Readwise" folder
+                    set theNote to missing value
+                    repeat with eachNote in (notes of theFolder)
+                        if name of eachNote is "{title}" then
+                            set theNote to eachNote
+                            exit repeat
+                        end if
+                    end repeat
+                    
+                    -- If found, append new content, otherwise create the note
+                    if theNote is not missing value then
+                        set the body of theNote to the body of theNote & ¬
+                        "<br>" & "<b>{highlight.text}</b>"
+                    else
+                        make new note at theFolder with properties {{name:"{title}", body:"{highlight.text}"}}
+                    end if
+                end tell
+                """
 
-            apple_script = f"""
-            tell application "Notes"
-                -- Ensure the "Readwise" folder exists
-                set folderName to "Readwise"
-                set theFolder to missing value
-                repeat with eachFolder in folders
-                    if name of eachFolder is folderName then
-                        set theFolder to eachFolder
+            else:
+                tags = ", ".join(tag.name for tag in highlight.tags)
+
+                apple_script = f"""
+                tell application "Notes"
+                    -- Ensure the "Readwise" folder exists
+                    set folderName to "Readwise"
+                    set theFolder to missing value
+                    repeat with eachFolder in folders
+                        if name of eachFolder is folderName then
+                            set theFolder to eachFolder
+                        end if
+                    end repeat
+                    if theFolder is missing value then
+                        set theFolder to (make new folder with properties {{name:folderName}})
                     end if
-                end repeat
-                if theFolder is missing value then
-                    set theFolder to (make new folder with properties {{name:folderName}})
-                end if
-                
-                -- Attempt to find the note by title in the "Readwise" folder
-                set theNote to missing value
-                repeat with eachNote in (notes of theFolder)
-                    if name of eachNote is "{title}" then
-                        set theNote to eachNote
-                        exit repeat
+                    
+                    -- Attempt to find the note by title in the "Readwise" folder
+                    set theNote to missing value
+                    repeat with eachNote in (notes of theFolder)
+                        if name of eachNote is "{title}" then
+                            set theNote to eachNote
+                            exit repeat
+                        end if
+                    end repeat
+                    
+                    -- If found, append new content, otherwise create the note
+                    if theNote is not missing value then
+                        set the body of theNote to the body of theNote & ¬
+                        "<br>" & "{highlight.text}" & ¬
+                        "<br><br>" & "<b>Note</b>: {highlight.note}" & ¬
+                        "<br>" & "<b>Tags</b>: {tags}" & ¬
+                        "<br>" & "<b>Last Updated</b>: {highlight.updated.strftime("%d/%m/%Y")}" & ¬
+                        "<br>"
+                    else
+                        make new note at theFolder with properties {{name:"{title}", body:"{highlight.text}"}}
                     end if
-                end repeat
-                
-                -- If found, append new content, otherwise create the note
-                if theNote is not missing value then
-                    set the body of theNote to the body of theNote & ¬
-                    "<br>" & "{highlight.text}" & ¬
-                    "<br>" & "Note: {highlight.note}" & ¬
-                    "<br>" & "Tags: {tags}" & ¬
-                    "<br>" & "Last Updated: {highlight.updated.strftime("%d/%m/%Y")}" & ¬
-                    "<br>"
-                else
-                    make new note at theFolder with properties {{name:"{title}", body:"{highlight.text}"}}
-                end if
-            end tell
-            """
+                end tell
+                """
 
             # Run the AppleScript
             subprocess.run(["osascript", "-e", apple_script], check=True)
 
             bar.update(1)
+
+
+def dump_highlights(book_id: str, book_title: str):
+    for highlight in get_book_highlights(book_id):
+        click.echo(
+            json.dumps(
+                {
+                    "title": book_title,
+                    "highlight": highlight.text,
+                    "note": highlight.note,
+                    "tags": ", ".join(tag.name for tag in highlight.tags),
+                },
+                indent=2,
+            )
+        )
 
 
 if __name__ == "__main__":
