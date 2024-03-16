@@ -10,3 +10,4 @@ venv
 .vscode
 .env
 .ruff_cache
+dist
