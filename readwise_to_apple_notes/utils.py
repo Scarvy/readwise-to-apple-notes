@@ -114,6 +114,10 @@ def export_to_apple_notes(updated_after: str, book_id: str):
                     """
 
                 # Run the AppleScript
-                subprocess.run(["osascript", "-e", apple_script], check=True)
+                subprocess.run(
+                    ["osascript", "-e", apple_script],
+                    check=True,
+                    stdout=subprocess.DEVNULL,
+                )
 
                 bar.update(1)
