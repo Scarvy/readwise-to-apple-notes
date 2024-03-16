@@ -1,4 +1,3 @@
-import itertools
 import json
 
 import click
@@ -13,23 +12,28 @@ def cli():
 
 
 @cli.command()
-@click.option("--stop-after", type=int, help="Stop after this many highlights")
-@click.option("--num-books", type=int, help="Number of books to process")
-@click.option("--dump", is_flag=True, help="Output highlights to standard output")
+@click.option(
+    "--updated-after", type=click.DateTime(), help="Get all highlights after this date"
+)
 @click.option("--book-id", type=str, help="Export highlights for a specific book")
-def export(stop_after, num_books, book_id, dump):
-    if book_id:  # Single book
-        book = utils.get_book_details(book_id)
-        if dump:
-            utils.dump_highlights(book["id"], book["title"])
-        else:
-            utils.export_book_highlights(book["id"], book["title"], stop_after)
-    else:  # All book highlights
-        for book in itertools.islice(utils.get_books(), num_books):
-            if dump:
-                utils.dump_highlights(book.id, book.title)
-            else:
-                utils.export_book_highlights(book.id, book.title, stop_after)
+@click.option("--dump", is_flag=True, help="Output highlights to standard output")
+def export(updated_after, book_id, dump):
+    if dump:
+        for book in utils.export_highlights(updated_after, book_id):
+            for highlight in book["highlights"]:
+                click.echo(
+                    json.dumps(
+                        {
+                            "title": book["title"],
+                            "highlight": highlight["text"],
+                            "note": highlight["note"],
+                            "tags": ", ".join(tag["name"] for tag in highlight["tags"]),
+                        },
+                        indent=2,
+                    )
+                )
+    else:  # Export highlights to apple Notes
+        utils.export_to_apple_notes(updated_after, book_id)
 
 
 @cli.command()
@@ -51,7 +55,6 @@ def books():
                     "category": book.category,
                     "num_highlights": book.num_highlights,
                     "source": book.source,
-                    "source_url": book.source_url,
                     "document_note": book.document_note,
                     "document_tag": ", ".join(tag.name for tag in book.tags),
                 },
