@@ -39,6 +39,9 @@ def export_to_apple_notes(updated_after: str, book_id: str):
             show_pos=True,
         ) as bar:
             for highlight in book["highlights"]:
+                clean_text = _escape_for_applescript(highlight["text"])
+                clean_note = _escape_for_applescript(highlight["note"])
+
                 if highlight["note"].startswith(".h"):
                     apple_script = f"""
                         tell application "Notes"
@@ -66,9 +69,9 @@ def export_to_apple_notes(updated_after: str, book_id: str):
                         -- If found, append new content, otherwise create the note
                         if theNote is not missing value then
                             set the body of theNote to the body of theNote & ¬
-                            "<br>" & "<b>{highlight["text"]}</b>"
+                            "<br>" & "<b>{clean_text}</b>"
                         else
-                            make new note at theFolder with properties {{name:"{book["title"]}", body:"{highlight["text"]}"}}
+                            make new note at theFolder with properties {{name:"{book["title"]}", body:"{clean_text}"}}
                         end if
                     end tell
                     """
@@ -103,8 +106,8 @@ def export_to_apple_notes(updated_after: str, book_id: str):
                         -- If found, append new content, otherwise create the note
                         if theNote is not missing value then
                             set the body of theNote to the body of theNote & ¬
-                            "<br>" & "{highlight["text"]}" & " (Location {highlight["location"]})" & ¬
-                            "<br><br>" & "<b>Note</b>: {highlight["note"]}" & ¬
+                            "<br>" & "{clean_text}" & " (Location {highlight["location"]})" & ¬
+                            "<br><br>" & "<b>Note</b>: {clean_note}" & ¬
                             "<br>" & "<b>Tags</b>: {highlight_tags}" & ¬
                             "<br>"
                         else
@@ -121,3 +124,20 @@ def export_to_apple_notes(updated_after: str, book_id: str):
                 )
 
                 bar.update(1)
+
+
+def _escape_for_applescript(text):
+    """
+    Escapes double quotes and backslashes in the given text for safe insertion into an AppleScript command.
+
+    Parameters:
+        text (str): The text to be escaped.
+
+    Returns:
+        The escaped text.
+    """
+    # Escape backslash first to avoid escaping already escaped characters later
+    text = text.replace("\\", "\\\\")
+    # Escape double quotes
+    text = text.replace('"', '\\"')
+    return text
