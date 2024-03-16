@@ -18,6 +18,7 @@ def cli():
 @click.option("--book-id", type=str, help="Export highlights for a specific book")
 @click.option("--dump", is_flag=True, help="Output highlights to standard output")
 def export(updated_after, book_id, dump):
+    """Export Readwise Highlight to Apple Notes."""
     if dump:
         for book in utils.export_highlights(updated_after, book_id):
             for highlight in book["highlights"]:
@@ -39,12 +40,14 @@ def export(updated_after, book_id, dump):
 @cli.command()
 @click.argument("book_id")
 def book(book_id):
+    """Get the details of a specific book."""
     book = utils.get_book_details(book_id)
     click.echo(json.dumps(book, indent=2))
 
 
 @cli.command()
 def books():
+    """Get a list of books from a user's Readwise library."""
     for book in utils.get_books():
         click.echo(
             json.dumps(

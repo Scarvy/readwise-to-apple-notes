@@ -12,17 +12,44 @@ client = Readwise(os.environ["READWISE_TOKEN"])
 
 
 def get_books():
+    """Generates a sequence of books from Readwise.
+
+    Yields:
+        dict: A dictionary representing a single book with its details.
+    """
     for book in client.get_books(category="books"):
         yield book
 
 
 def get_book_details(book_id: str) -> dict:
+    """Retrieves the details of a specific book by its ID.
+
+    Parameters:
+        book_id (str): The unique identifier for the book.
+
+    Returns:
+        dict: A dictionary containing the details of the book.
+    """
     return client.get(f"/books/{book_id}").json()
 
 
 def export_highlights(
     updated_after: str = None, book_ids: str = None
 ) -> Generator[dict, None, None]:
+    """Exports the highlights of books based on modification date and/or specific book IDs.
+
+    This function iterates over pages of highlights fetched from the client service,
+    filtering by update time and book IDs if provided, and yields each highlight.
+
+    Parameters:
+        updated_after (str, optional): The ISO 8601 date string to filter highlights
+            that were updated after a certain date. Defaults to None.
+        book_ids (str, optional): A comma-separated string of book IDs to filter
+            highlights by specific books. Defaults to None.
+
+    Yields:
+        dict: A dictionary representing a single book's highlight.
+    """
     for data in client.get_pagination_limit_20(
         "/export/", params={"updatedAfter": updated_after, "ids": book_ids}
     ):
@@ -30,7 +57,23 @@ def export_highlights(
             yield book
 
 
-def export_to_apple_notes(updated_after: str, book_id: str):
+def export_to_apple_notes(updated_after: str, book_id: str) -> None:
+    """Exports book highlights to Apple Notes.
+
+    For each highlight of a given book, this function formats the highlight and note
+    content, creating or updating a note in the "Readwise" folder within Apple Notes.
+    Progress is shown through a progress bar.
+
+    Parameters:
+        updated_after (str): The ISO 8601 date string to filter highlights
+            that were updated after this date.
+        book_id (str): The unique identifier for the book whose highlights
+            are to be exported.
+
+    Note:
+        This function directly manipulates Apple Notes using AppleScript and
+        requires that the user has permissions to execute `osascript`.
+    """
     for book in export_highlights(updated_after, book_id):
         with click.progressbar(
             length=len(book["highlights"]),
@@ -126,7 +169,7 @@ def export_to_apple_notes(updated_after: str, book_id: str):
                 bar.update(1)
 
 
-def _escape_for_applescript(text):
+def _escape_for_applescript(text: str) -> str:
     """
     Escapes double quotes and backslashes in the given text for safe insertion into an AppleScript command.
 
@@ -134,7 +177,7 @@ def _escape_for_applescript(text):
         text (str): The text to be escaped.
 
     Returns:
-        The escaped text.
+        str: The escaped text.
     """
     # Escape backslash first to avoid escaping already escaped characters later
     text = text.replace("\\", "\\\\")
