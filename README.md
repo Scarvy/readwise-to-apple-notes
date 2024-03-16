@@ -30,8 +30,8 @@ You can also use:
 
 ### Export
 
-> ![NOTE]
-> When you first run the `export` command. The script will create a new folder in your Apple Notes labled "Readwise" if it does not exist. All highlights within a given book, article, document will be placed in the same note. See example blow.
+> [!NOTE]
+> When you first run the `export` command. The script will create a new folder in your Apple Notes labled "Readwise" if it does not exist. All highlights within a given book, article, document will be placed in the same note. See example below.
 
 ![readwise-apple-note-example](/images/readwise-apple-note-example-v2.png)
 
@@ -89,7 +89,7 @@ When you need to look up a`book_id`, run:
 
 If you know the `book_id` and want to check a book's details, run:
 
-    readwise-to-apple-notes book <book_id>
+    readwise-to-apple-notes book 29932193
 
     {
         "id": 29932193,
@@ -108,7 +108,7 @@ If you know the `book_id` and want to check a book's details, run:
         "document_note": ""
     }
 
-### Reference
+### API Reference
 
     Usage: readwise-to-apple-notes [OPTIONS] COMMAND [ARGS]...
 
