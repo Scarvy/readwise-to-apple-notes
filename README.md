@@ -61,7 +61,7 @@ Or a list of books:
 
 ### Additional Commands
 
-When you need to look a `book_id`, run:
+When you need to look up a`book_id`, run:
 
     readwise-to-apple-notes books
     
