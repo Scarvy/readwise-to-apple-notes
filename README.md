@@ -7,6 +7,8 @@
 
 Export Readwise highlights to Apple Notes.
 
+![apple-notes-readwise-folder](images/apple-notes-readwise-folder.png)
+
 ## Installation
 
 Install this tool using `pip`:
@@ -15,7 +17,7 @@ Install this tool using `pip`:
 
 ## Usage
 
-> [!NOTE]
+> [!IMPORTANT]
 > First, obtain a Readwise access token. Then, the token has to be stored, either into an .env file or an environment variable using export READWISE_TOKEN=<your_token>.
 
 For help, run:
@@ -28,9 +30,22 @@ You can also use:
 
 ### Export
 
+> ![NOTE]
+> When you first run the `export` command. The script will create a new folder in your Apple Notes labled "Readwise" if it does not exist. All highlights within a given book, article, document will be placed in the same note. See example blow.
+
+![readwise-apple-note-example](/images/readwise-apple-note-example-v2.png)
+
 Export all highlights:
 
     readwise-to-apple-notes export
+
+You should see progress bars for each document and the number of highlights to be written to a new Apple Note.
+
+    readwise-to-apple-notes export
+
+    Exporting highlights  [####################################]  28/28 100% 
+    Exporting highlights  [####################################]  10/10  100%         
+    Exporting highlights  [####################################]  21/21  100%  
 
 Export after a specific date:
 
