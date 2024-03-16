@@ -9,3 +9,4 @@ venv
 .DS_Store
 .vscode
 .env
+.ruff_cache
