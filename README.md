@@ -1,9 +1,9 @@
-# readwise-apple-notes
+# readwise-to-apple-notes
 
-[![PyPI](https://img.shields.io/pypi/v/readwise-apple-notes.svg)](https://pypi.org/project/readwise-apple-notes/)
-[![Changelog](https://img.shields.io/github/v/release/Scarvy/readwise-apple-notes?include_prereleases&label=changelog)](https://github.com/Scarvy/readwise-apple-notes/releases)
-[![Tests](https://github.com/Scarvy/readwise-apple-notes/actions/workflows/test.yml/badge.svg)](https://github.com/Scarvy/readwise-apple-notes/actions/workflows/test.yml)
-[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/Scarvy/readwise-apple-notes/blob/master/LICENSE)
+[![PyPI](https://img.shields.io/pypi/v/readwise-to-apple-notes.svg)](https://pypi.org/project/readwise-to-apple-notes/)
+[![Changelog](https://img.shields.io/github/v/release/Scarvy/readwise-to-apple-notes?include_prereleases&label=changelog)](https://github.com/Scarvy/readwise-to-apple-notes/releases)
+[![Tests](https://github.com/Scarvy/readwise-to-apple-notes/actions/workflows/test.yml/badge.svg)](https://github.com/Scarvy/readwise-to-apple-notes/actions/workflows/test.yml)
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/Scarvy/readwise-to-apple-notes/blob/master/LICENSE)
 
 Export Readwise highlights to Apple Notes.
 
@@ -11,7 +11,7 @@ Export Readwise highlights to Apple Notes.
 
 Install this tool using `pip`:
 
-    pip install readwise-apple-notes
+    pip install readwise-to-apple-notes
 
 ## Usage
 
@@ -20,35 +20,35 @@ Install this tool using `pip`:
 
 For help, run:
 
-    readwise-apple-notes --help
+    readwise-to-apple-notes --help
 
 You can also use:
 
-    python -m readwise-apple-notes --help
+    python -m readwise-to-apple-notes --help
 
 ### Export
 
 Export all highlights:
 
-    readwise-apple-notes export
+    readwise-to-apple-notes export
 
 Export after a specific date:
 
-    readwise-apple-notes export --updated-after 2024-03-15
+    readwise-to-apple-notes export --updated-after 2024-03-15
 
 Export a single books highlights:
 
-    readwise-apple-notes export --book-id=<user_book_id>
+    readwise-to-apple-notes export --book-id=<user_book_id>
 
 Or a list of books:
 
-    readwise-apple-notes export --book-id=<user_book_id>,<another_book_id>
+    readwise-to-apple-notes export --book-id=<user_book_id>,<another_book_id>
 
 ### Additional Commands
 
 When you need to look a `book_id`, run:
 
-    readwise-apple-notes books
+    readwise-to-apple-notes books
     
     {
         "id": 29932193,
@@ -74,7 +74,7 @@ When you need to look a `book_id`, run:
 
 If you know the `book_id` and want to check a book's details, run:
 
-    readwise-apple-notes book <book_id>
+    readwise-to-apple-notes book <book_id>
 
     {
         "id": 29932193,
@@ -95,7 +95,7 @@ If you know the `book_id` and want to check a book's details, run:
 
 ### Reference
 
-    Usage: readwise-apple-notes [OPTIONS] COMMAND [ARGS]...
+    Usage: readwise-to-apple-notes [OPTIONS] COMMAND [ARGS]...
 
     Export Readwise Highlights to Apple Notes.
 
@@ -112,7 +112,7 @@ If you know the `book_id` and want to check a book's details, run:
 
 To contribute to this tool, first checkout the code. Then create a new virtual environment using `poetry`:
 
-    cd readwise-apple-notes
+    cd readwise-to-apple-notes
     poetry install
 
 Now install the dependencies and test dependencies:

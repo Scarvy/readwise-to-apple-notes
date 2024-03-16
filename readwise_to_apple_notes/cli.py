@@ -2,7 +2,7 @@ import json
 
 import click
 
-from readwise_apple_notes import utils
+from readwise_to_apple_notes import utils
 
 
 @click.group()

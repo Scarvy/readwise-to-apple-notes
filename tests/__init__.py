@@ -1,6 +1,6 @@
 from click.testing import CliRunner
 
-from readwise_apple_notes.cli import cli
+from readwise_to_apple_notes.cli import cli
 
 
 def test_version():
