@@ -8,7 +8,13 @@ from readwise import Readwise
 
 load_dotenv()
 
-client = Readwise(os.environ["READWISE_TOKEN"])
+try:
+    client = Readwise(os.environ["READWISE_TOKEN"])
+except KeyError:
+    raise EnvironmentError(
+        "READWISE_TOKEN environment variable is not set.",
+        "Please set it before continuing or place it in a .env file.",
+    )
 
 
 def get_books():
