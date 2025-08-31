@@ -11,9 +11,17 @@ Export Readwise highlights to Apple Notes.
 
 ## Installation
 
-Install this tool using `pip`:
+Install this tool using `uv`:
 
-    pip install readwise-to-apple-notes
+    uv add readwise-to-apple-notes
+
+Or add install it as a tool:
+
+    uv tool install readwise-to-apple-notes
+
+then run:
+
+    readwise-to-apple-notes export
 
 ## Usage
 
@@ -26,12 +34,12 @@ For help, run:
 
 You can also use:
 
-    python -m readwise-to-apple-notes --help
+    uv run readwise-to-apple-notes --help
 
 ### Export
 
 > [!NOTE]
-> When you first run the `export` command. The script will create a new folder in your Apple Notes labled "Readwise" if it does not exist. All highlights within a given book, article, document will be placed in the same note. See example below.
+> When you first run the `export` command. The script will create a new folder in your Apple Notes labeled "Readwise" if it does not exist. All highlights within a given book, article, document will be placed in the same note. See example below.
 
 ![readwise-apple-note-example](/images/readwise-apple-note-example-v2.png)
 
@@ -125,15 +133,15 @@ If you know the `book_id` and want to check a book's details, run:
 
 ## Development
 
-To contribute to this tool, first checkout the code. Then create a new virtual environment using `poetry`:
+To contribute to this tool, first checkout the code. Then run `uv sync`:
 
     cd readwise-to-apple-notes
-    poetry install
+    uv sync
 
 Now install the dependencies and test dependencies:
 
-    poetry install --with=dev
+    uv sync --group dev
 
 To run the tests:
 
-    pytest
+    uv run pytest
