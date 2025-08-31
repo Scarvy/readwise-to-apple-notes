@@ -40,7 +40,7 @@ def get_book_details(book_id: str) -> dict:
 
 
 def export_highlights(
-    updated_after: str = None, book_ids: str = None
+    updated_after: str = "", book_ids: str = ""
 ) -> Generator[dict, None, None]:
     """Exports the highlights of books based on modification date and/or specific book IDs.
 
